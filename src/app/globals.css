@@ -1,0 +1,245 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-courier-prime);
+  --font-mono: var(--font-courier-prime);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: 0;
+  --radius-md: 0;
+  --radius-lg: 0;
+  --radius-xl: 0;
+}
+
+:root {
+  --radius: 0;
+  --background: #ffffff;
+  --foreground: #000000;
+  --card: #ffffff;
+  --card-foreground: #000000;
+  --popover: #ffffff;
+  --popover-foreground: #000000;
+  --primary: #000000;
+  --primary-foreground: #ffffff;
+  --secondary: #ffffff;
+  --secondary-foreground: #000000;
+  --muted: #f5f5f5;
+  --muted-foreground: #555555;
+  --accent: #000000;
+  --accent-foreground: #ffffff;
+  --destructive: #000000;
+  --border: #000000;
+  --input: #000000;
+  --ring: #000000;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/0;
+    border-radius: 0 !important;
+  }
+  html, body {
+    @apply bg-background text-foreground;
+    font-family: var(--font-courier-prime), "Courier Prime", "Courier New", ui-monospace, monospace;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  body {
+    background-color: #ffffff;
+    background-image: none;
+    position: relative;
+  }
+  /* Scanlines overlay */
+  body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 9999;
+    background-image: repeating-linear-gradient(
+      0deg,
+      rgba(0, 0, 0, 0.035) 0,
+      rgba(0, 0, 0, 0.035) 1px,
+      transparent 1px,
+      transparent 3px
+    );
+    mix-blend-mode: multiply;
+  }
+  /* Periodic contrast glitch — NO transform (would break position:fixed) */
+  @keyframes bru-glitch {
+    0%, 92%, 100% { filter: none; }
+    93% { filter: contrast(1.05); }
+    94% { filter: contrast(1.02); }
+    95% { filter: contrast(1.1); }
+    96% { filter: none; }
+  }
+  html {
+    animation: bru-glitch 12s infinite steps(20);
+  }
+}
+
+/* ==== BRUTALIST UTILITY CLASSES ==== */
+.bru-border { border: 2px solid #000; }
+.bru-border-l { border-left: 2px solid #000; }
+.bru-border-r { border-right: 2px solid #000; }
+.bru-border-t { border-top: 2px solid #000; }
+.bru-border-b { border-bottom: 2px solid #000; }
+.bru-border-white { border-color: #fff; }
+.bru-border-black { border-color: #000; }
+.bru-border-b-0 { border-bottom: 0; }
+.bru-border-r-0 { border-right: 0; }
+
+.bru-pressable {
+  transition: transform 80ms ease-out, box-shadow 80ms ease-out;
+}
+.bru-pressable:active {
+  transform: translate(3px, 3px);
+  box-shadow: 0 0 0 0 #000 !important;
+}
+.bru-shadow { box-shadow: 6px 6px 0 0 #000; }
+
+/* Hatched pattern */
+.bru-hatch {
+  background-image: repeating-linear-gradient(
+    45deg,
+    #000 0,
+    #000 1px,
+    transparent 1px,
+    transparent 6px
+  );
+}
+
+/* Grid backgrounds */
+.bru-grid {
+  background-image:
+    linear-gradient(#000 1px, transparent 1px),
+    linear-gradient(90deg, #000 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+.bru-grid-fine {
+  background-image:
+    linear-gradient(rgba(0,0,0,0.08) 0.5px, transparent 0.5px),
+    linear-gradient(90deg, rgba(0,0,0,0.08) 0.5px, transparent 0.5px);
+  background-size: 10px 10px;
+}
+
+/* Blinking status dot */
+@keyframes bru-blink {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0.15; }
+}
+.bru-blink { animation: bru-blink 1.4s steps(2) infinite; }
+
+/* Marquee */
+@keyframes bru-marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-100%); }
+}
+.bru-marquee {
+  display: inline-flex;
+  white-space: nowrap;
+  animation: bru-marquee 30s linear infinite;
+  padding-right: 100%;
+}
+.bru-marquee-inner {
+  display: inline-flex;
+  white-space: nowrap;
+}
+
+/* Custom scrollbar */
+.bru-scroll::-webkit-scrollbar { width: 8px; height: 8px; }
+.bru-scroll::-webkit-scrollbar-track { background: #fff; border: 2px solid #000; }
+.bru-scroll::-webkit-scrollbar-thumb { background: #000; }
+.bru-scroll::-webkit-scrollbar-thumb:hover { background: #555; }
+
+/* Selection */
+::selection { background: #000; color: #fff; }
+
+/* Focus */
+:focus-visible { outline: 3px solid #000; outline-offset: 2px; }
+
+/* CRT flicker */
+@keyframes bru-flicker {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.96; }
+}
+.bru-flicker { animation: bru-flicker 4s steps(60) infinite; }
+
+/* Image B&W filter */
+.bru-bw { filter: grayscale(100%) contrast(1.15); }
+
+/* Brutalist range slider */
+.bru-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  width: 100%;
+  height: 24px;
+  cursor: pointer;
+  margin: 0;
+}
+.bru-slider:focus { outline: none; }
+.bru-slider::-webkit-slider-runnable-track {
+  background: #ffffff;
+  border: 2px solid #000000;
+  height: 16px;
+  border-radius: 0;
+}
+.bru-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  background: #000000;
+  border: 2px solid #000000;
+  width: 8px;
+  height: 24px;
+  margin-top: -6px;
+  cursor: ew-resize;
+  border-radius: 0;
+}
+.bru-slider::-moz-range-track {
+  background: #ffffff;
+  border: 2px solid #000000;
+  height: 16px;
+  border-radius: 0;
+}
+.bru-slider::-moz-range-thumb {
+  background: #000000;
+  border: 2px solid #000000;
+  width: 8px;
+  height: 24px;
+  cursor: ew-resize;
+  border-radius: 0;
+}
+.bru-slider-dark::-webkit-slider-runnable-track {
+  background: #000000;
+  border: 2px solid #ffffff;
+}
+.bru-slider-dark::-webkit-slider-thumb {
+  background: #ffffff;
+  border: 2px solid #ffffff;
+}
+.bru-slider-dark::-moz-range-track {
+  background: #000000;
+  border: 2px solid #ffffff;
+}
+.bru-slider-dark::-moz-range-thumb {
+  background: #ffffff;
+  border: 2px solid #ffffff;
+}
